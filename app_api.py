@@ -98,62 +98,6 @@ def predict(image,model) :
     return ela_img,prediction
 
 
-# def predict_region(img,model) :
-#     temp_img_arr=cv2.resize(img,(512,512))
-#     temp_preprocess_img=cv2.filter2D(temp_img_arr,-1,filters)
-#     temp_preprocess_img=cv2.resize(temp_preprocess_img,(512,512))
-#     temp_img_arr=temp_img_arr.reshape(1,512,512,3)
-#     temp_preprocess_img=temp_preprocess_img.reshape(1,512,512,3)
-#     model_temp=model.predict([temp_img_arr,temp_preprocess_img])
-#     model_temp=model_temp[0].reshape(512,512)
-#     for i in range(model_temp.shape[0]) :
-#         for j in range(model_temp.shape[1]) :
-#             if model_temp[i][j]>0.75 :
-#                 model_temp[i][j]=1.0
-#             else :
-#                 model_temp[i][j]=0.0
-                
-    
-#     return model_temp
-
-# def predict_region(img, model):
-#     try:
-#         # Resize the image
-#         temp_img_arr = cv2.resize(img, (512, 512))
-#         print(f"Resized Image Shape: {temp_img_arr.shape}")  # Debug: Print resized image shape
-
-#         # Apply the filters
-#         temp_preprocess_img = cv2.filter2D(temp_img_arr, -1, filters)
-#         print(f"Filtered Image Shape: {temp_preprocess_img.shape}")  # Debug: Print filtered image shape
-
-#         # Resize the preprocessed image
-#         temp_preprocess_img = cv2.resize(temp_preprocess_img, (512, 512))
-
-#         # Reshape the images for model input
-#         temp_img_arr = temp_img_arr.reshape(1, 512, 512, 3)
-#         temp_preprocess_img = temp_preprocess_img.reshape(1, 512, 512, 3)
-
-#         # Predict using the model
-#         model_temp = model.predict([temp_img_arr, temp_preprocess_img])
-#         print(f"Model Output Shape: {model_temp.shape}")  # Debug: Print model output shape
-
-#         # Reshape the model output
-#         model_temp = model_temp[0].reshape(512, 512)
-
-#         # Post-process the model output
-#         for i in range(model_temp.shape[0]):
-#             for j in range(model_temp.shape[1]):
-#                 if model_temp[i][j] > 0.75:
-#                     model_temp[i][j] = 1.0
-#                 else:
-#                     model_temp[i][j] = 0.0
-
-#         return model_temp
-
-#     except Exception as e:
-#         print(f"Error in predict_region: {str(e)}")  # Debug: Print error messages for debugging
-#         return None  # Return None in case of an error
-
 def predict_region(img, load_model):
     img = np.array(img)
     temp_img_arr = cv2.resize(img, (512, 512))
@@ -197,7 +141,6 @@ async def detect_forgery(file: UploadFile = File(...)):
         region_img.save(buffer, format='PNG')
         encoded_region = base64.b64encode(buffer.getvalue()).decode('utf-8')
         link_url = f"data:image/png;base64,{encoded_region}"
-        print(forgery_map) 
         
 
     # reshaped_img = ela_img
@@ -222,27 +165,6 @@ async def detect_forgery(file: UploadFile = File(...)):
     }
     return response
 
-
-
-
-# @app.post("/detect-region")
-# async def detect_forgery(file: UploadFile = File(...)):
-#     contents = await file.read()  # Read the contents of the uploaded file as bytes
-#     img = Image.open(io.BytesIO(contents))  # Open the image from the bytes content
-#     forgery_map = predict_region(img, loaded_model)
-#     forgery_map = forgery_map.reshape((512,512))
-#     region_img = Image.fromarray((forgery_map * 255).astype(np.uint8))
-#     buffer = io.BytesIO()
-#     region_img.save(buffer, format='PNG')
-#     encoded_region = base64.b64encode(buffer.getvalue()).decode('utf-8')
-#     link_url = f"data:image/png;base64,{encoded_region}"
-#     print(forgery_map) 
-        
-
-#     response = {
-#         "forgery_map": link_url
-#     }
-#     return response
 
 if __name__ == "__main__":
     import uvicorn
