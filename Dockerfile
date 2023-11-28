@@ -28,6 +28,13 @@ RUN adduser \
     --uid "${UID}" \
     appuser
 
+# Create and activate a virtual environment
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Upgrade pip within the virtual environment
+RUN python -m pip install --upgrade pip
+
 COPY requirements.txt .
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
