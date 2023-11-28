@@ -1,21 +1,17 @@
 import io
 from fastapi import FastAPI, UploadFile, File
-from PIL import Image as PILImage
+from PIL import Image 
 from io import BytesIO
 import numpy as np
 import cv2
-import streamlit as st
-import matplotlib.pyplot as plt
 from keras.utils import normalize
 from keras.models import *
 import numpy as np
-import pickle as pkl
 from PIL import Image,ImageChops, ImageEnhance
 import cv2
 import base64
 
 
-# Your existing functions and imports go here...
 
 #Function for ela 
 def convert_to_ela_image(image, quality):
@@ -140,7 +136,7 @@ async def detect_forgery(file: UploadFile = File(...)):
         buffer = io.BytesIO()
         region_img.save(buffer, format='PNG')
         encoded_region = base64.b64encode(buffer.getvalue()).decode('utf-8')
-        link_url = f"data:image/png;base64,{encoded_region}"
+        link_url = f"{encoded_region}"
         
 
     # reshaped_img = ela_img
@@ -153,7 +149,7 @@ async def detect_forgery(file: UploadFile = File(...)):
     encoded_img = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
     # Create a data URL
-    data_url = f"data:image/png;base64,{encoded_img}"
+    data_url = f"{encoded_img}"
 
 
     response = {
@@ -168,4 +164,4 @@ async def detect_forgery(file: UploadFile = File(...)):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
